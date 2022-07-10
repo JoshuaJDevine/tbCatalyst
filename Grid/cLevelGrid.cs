@@ -54,4 +54,14 @@ public class cLevelGrid : MonoBehaviour
     {
         return gridSystem.GetGridPosition(worldPosition);
     }
+
+    public bool IsValidGridPosition(cGridPosition gridPosition)
+    {
+        return gridSystem.IsValidGridPosition(gridPosition);
+    }
+
+    public Vector3 GetWorldPosition(cGridPosition gridPosition)
+    {
+        return gridSystem.GetWorldPosition(gridPosition);
+    }
 }

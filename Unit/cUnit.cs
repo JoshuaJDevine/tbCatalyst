@@ -64,10 +64,7 @@ namespace DBS.Catalyst.Units
         public void UpdateGridPosition(Vector3 newTargetPosition)
         {
             cLevelGrid levelGrid = cLevelGrid.Instance;
-            
-            //Don't allow move if there is already a unit at this grid position
-            if (levelGrid.GetUnitAtGridPosition(levelGrid.GetGridPosition(newTargetPosition))) return;
-            
+
             //Clear unit from current grid position
             cGridPosition currentGridPosition = levelGrid.GetGridPosition(transform.position);
             levelGrid.ClearUnitAtGridPosition(currentGridPosition);

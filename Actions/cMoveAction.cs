@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using DBS.Catalyst;
 using DBS.Catalyst.Units;
 using Sirenix.OdinInspector;
@@ -45,10 +46,22 @@ public class cMoveAction : MonoBehaviour
 
     public void SetTargetPosition(Vector3 targetPosition)
     {
-        this.TargetPosition = targetPosition;
-        unit.UpdateGridPosition(targetPosition);
+        cGridPosition targetGridPosition = cLevelGrid.Instance.GetGridPosition(targetPosition);
+        
+        //don't allow if not in valid position list
+        if (!IsValidActionGridPosition(targetGridPosition)) return;
+        
+        Vector3 newTagetPos = cLevelGrid.Instance.GetWorldPosition(targetGridPosition);
+        
+        this.TargetPosition = newTagetPos;
+        unit.UpdateGridPosition(newTagetPos);
     }
 
+    public bool IsValidActionGridPosition(cGridPosition gridPosition)
+    {
+        List<cGridPosition> validGridPositionList = GetValidActionGridPositionList();
+        return validGridPositionList.Contains(gridPosition);
+    }
     public List<cGridPosition> GetValidActionGridPositionList()
     {
         List<cGridPosition> validGridPositionList = new List<cGridPosition>();
@@ -60,7 +73,12 @@ public class cMoveAction : MonoBehaviour
             {
                 cGridPosition offsetGridPosition = new cGridPosition(x, z);
                 cGridPosition testGridPosition = unitGridPosition + offsetGridPosition;
-                Debug.Log(testGridPosition);
+                
+                if (!cLevelGrid.Instance.IsValidGridPosition(testGridPosition)) continue;
+                if (unitGridPosition == testGridPosition) continue;
+                if (cLevelGrid.Instance.GetUnitAtGridPosition(testGridPosition)) continue;
+                
+                validGridPositionList.Add(testGridPosition);
             }
         }
 

@@ -54,10 +54,17 @@ namespace DBS.Catalyst
                 }
             }
         }
-
         public cGridObject GetGridObject(cGridPosition gridPosition)
         {
             return gridObjectArray[gridPosition.x, gridPosition.z];
+        }
+
+        public bool IsValidGridPosition(cGridPosition gridPosition)
+        {
+            return (gridPosition.x >= 0 && 
+                    gridPosition.z >= 0 && 
+                    gridPosition.x < width && 
+                    gridPosition.z < height);
         }
     }
 }
