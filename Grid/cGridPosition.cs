@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting.Dependencies.NCalc;
 
 namespace DBS.Catalyst
 {
@@ -36,7 +37,15 @@ namespace DBS.Catalyst
         {
             return HashCode.Combine(x, z);
         }
-        
+
+        public static cGridPosition operator +(cGridPosition a, cGridPosition b)
+        {
+            return new cGridPosition(a.x + b.x, a.z + b.z);
+        }
+        public static cGridPosition operator -(cGridPosition a, cGridPosition b)
+        {
+            return new cGridPosition(a.x - b.x, a.z - b.z);
+        }
 
     }
 }

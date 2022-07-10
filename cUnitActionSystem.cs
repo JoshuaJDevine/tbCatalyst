@@ -40,7 +40,7 @@ namespace DBS.Catalyst.Units
                 {
                     if (Input.GetMouseButtonDown(1))
                     {
-                        SelectedUnit.Move(cMouseWorld.GetPosition());
+                        SelectedUnit.GetMoveAction().SetTargetPosition(cMouseWorld.GetPosition());
                     }
                 }
             }

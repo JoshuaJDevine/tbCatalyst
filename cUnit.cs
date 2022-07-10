@@ -15,15 +15,12 @@ namespace DBS.Catalyst.Units
         [BoxGroup("Animation Setup")] public cMotor motor;
         [BoxGroup("Animation Setup")] public cUnitSelectedVisual selectedVisual;
 
-        [BoxGroup("Properties")] [ShowInInspector]
-        public string unitName;
+        [BoxGroup("Properties")] [ShowInInspector] public string unitName;
         [BoxGroup("Properties")] [ShowInInspector] public bool IsSelected { get; private set; }
         [BoxGroup("Properties")] [ShowInInspector] public bool IsBusy { get; set; } = false;
         [BoxGroup("Properties")] [ShowInInspector] public bool IsMoving { get; set; } = false;
-        [BoxGroup("Properties")] [ShowInInspector] public Vector3 TargetPosition { get; set; }
-        [BoxGroup("Properties")] [ShowInInspector] public float MoveSpeed { get; set; } = 4f;
-        [BoxGroup("Properties")] [ShowInInspector] public float RotateSpeed { get; set; } = 10f;
-        [BoxGroup("Properties")] [ShowInInspector] public float StopDistance { get; set; } = .1f;
+        private cMoveAction moveAction { get; set; }
+
 
         public override string ToString()
         {
@@ -32,21 +29,16 @@ namespace DBS.Catalyst.Units
 
         private void Awake()
         {
-            TargetPosition = transform.position;
+            moveAction = GetComponent<cMoveAction>();
         }
 
         private void Start()
         {
             cUnitActionSystem.Instance.OnSelectedUnitChange += cUnitActionSystem_OnSelectedUnitChange;
-
             cGridPosition gridPosition = cLevelGrid.Instance.GetGridPosition(transform.position);
             cLevelGrid.Instance.SetUnitAtGridPosition(gridPosition, this);
         }
-        private void Update()
-        {
-            MoveToTargetPosition();
-        }
-
+        
         private void cUnitActionSystem_OnSelectedUnitChange(object sender, EventArgs empty)
         {
             cUnitActionSystem unitActionSystem = (cUnitActionSystem)sender;
@@ -55,25 +47,6 @@ namespace DBS.Catalyst.Units
                 Select();
             else
                 Deselect();
-        }
-        private void MoveToTargetPosition()
-        {
-            if (Vector3.Distance(transform.position, TargetPosition) > StopDistance)
-            {
-                IsBusy = true;
-                IsMoving = true;
-                motor.cAnimator.SetFloat("speed", MoveSpeed);
-
-                Vector3 moveDirection = (TargetPosition - transform.position).normalized;
-                transform.position += moveDirection * MoveSpeed * Time.deltaTime;
-                transform.forward = Vector3.Lerp(transform.forward, moveDirection, Time.deltaTime  * RotateSpeed);
-            }
-            else
-            {
-                IsBusy = false;
-                IsMoving = false;
-                motor.cAnimator.SetFloat("speed", 0f);
-            }
         }
 
         public void Select()
@@ -87,23 +60,32 @@ namespace DBS.Catalyst.Units
             selectedVisual.Deselect();
             IsSelected = false;
         }
-
-        public void Move(Vector3 targetPosition)
+        
+        public void UpdateGridPosition(Vector3 newTargetPosition)
         {
             cLevelGrid levelGrid = cLevelGrid.Instance;
             
             //Don't allow move if there is already a unit at this grid position
-            if (levelGrid.GetUnitAtGridPosition(levelGrid.GetGridPosition(targetPosition))) return;
+            if (levelGrid.GetUnitAtGridPosition(levelGrid.GetGridPosition(newTargetPosition))) return;
             
             //Clear unit from current grid position
-            cGridPosition currentGridPosition = levelGrid.GetGridPosition(this.TargetPosition);
+            cGridPosition currentGridPosition = levelGrid.GetGridPosition(transform.position);
             levelGrid.ClearUnitAtGridPosition(currentGridPosition);
             
             //Change this target position &&
             //Set unit at the target grid position
-            this.TargetPosition = targetPosition;
-            cGridPosition nextGridPosition = levelGrid.GetGridPosition(targetPosition);
+            cGridPosition nextGridPosition = levelGrid.GetGridPosition(newTargetPosition);
             levelGrid.SetUnitAtGridPosition(nextGridPosition, this);
+        }
+
+        public cMoveAction GetMoveAction()
+        {
+            return moveAction;
+        }
+
+        public cGridPosition GetGridPosition()
+        {
+            return cLevelGrid.Instance.GetGridPosition(transform.position);
         }
     }
 }
