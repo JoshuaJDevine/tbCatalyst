@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -12,12 +13,28 @@ namespace DBS.Catalyst
         public void SetGridObject(cGridObject gridObject)
         {
             this.gridObject = gridObject;
-            UpdateText(gridObject.ToString());
+            UpdateText();
         }
 
-        public void UpdateText(string newText)
+        private void Awake()
         {
-            text.text = newText;
+            cLevelGrid.Instance.OnSetUnitAtGridPosition += cLevelGridSystem_OnSetUnitAtGridPosition;
+            cLevelGrid.Instance.OnClearUnitAtGridPosition += cLevelGridSystem_OnClearUnitAtGridPosition;
+        }
+
+        public void cLevelGridSystem_OnSetUnitAtGridPosition(object sender, EventArgs empty)
+        {
+            UpdateText();
+        }
+
+        public void UpdateText()
+        {
+            text.text = gridObject.ToString();
+        }
+
+        public void cLevelGridSystem_OnClearUnitAtGridPosition(object sender, EventArgs empty)
+        {
+            UpdateText();
         }
     }
 }
