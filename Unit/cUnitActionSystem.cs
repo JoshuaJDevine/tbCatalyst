@@ -41,6 +41,8 @@ namespace DBS.Catalyst.Units
                     if (Input.GetMouseButtonDown(1))
                     {
                         SelectedUnit.GetMoveAction().SetTargetPosition(cMouseWorld.GetPosition());
+                        SelectedUnit.GetMoveAction().HideAllMoves();
+                        DeselectAllUnits();
                     }
                 }
             }
@@ -50,9 +52,10 @@ namespace DBS.Catalyst.Units
             if (Input.GetMouseButtonDown(0))
             {
                 cUnit unit = cMouseWorld.GetUnit();
-                if (unit)
+                if (unit && !unit.IsBusy)
                 {
                     SelectUnit(unit);
+                    unit.GetMoveAction().HighlightValidMoves();
                 }
             }
         }
@@ -60,6 +63,12 @@ namespace DBS.Catalyst.Units
         private void SelectUnit(cUnit unit)
         {
             SelectedUnit = unit;
+            OnSelectedUnitChange?.Invoke(this, EventArgs.Empty);
+        }
+
+        private void DeselectAllUnits()
+        {
+            SelectedUnit = null;
             OnSelectedUnitChange?.Invoke(this, EventArgs.Empty);
         }
     }

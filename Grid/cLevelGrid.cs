@@ -13,6 +13,7 @@ public class cLevelGrid : MonoBehaviour
     public static cLevelGrid Instance { get; private set; }
     
     [SerializeField] private Transform gridDebugObject; 
+    [SerializeField] private GameObject gridSystemVisual;
 
     private cGridSystem gridSystem;
     private void Awake()
@@ -27,7 +28,7 @@ public class cLevelGrid : MonoBehaviour
 
         
         gridSystem = new cGridSystem(10, 10, 2f);
-        gridSystem.CreateDebugObjects(gridDebugObject);
+        gridSystem.CreateDebugObjects(gridDebugObject, gridSystemVisual);
     }
 
     public void SetUnitAtGridPosition(cGridPosition gridPosition, cUnit unit)
@@ -63,5 +64,10 @@ public class cLevelGrid : MonoBehaviour
     public Vector3 GetWorldPosition(cGridPosition gridPosition)
     {
         return gridSystem.GetWorldPosition(gridPosition);
+    }
+    
+    public cGridSystemVisual GetGridSystemVisual(cGridPosition gridPosition)
+    {
+        return gridSystem.GetGridSystemVisual(gridPosition);
     }
 }

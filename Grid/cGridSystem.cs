@@ -11,6 +11,7 @@ namespace DBS.Catalyst
         private int height;
         private float cellSize;
         private cGridObject[,] gridObjectArray;
+        private cGridSystemVisual[,] gridSystemVisualArray;
         public cGridSystem(int width, int height, float cellSize)
         {
             this.width = width;
@@ -41,22 +42,33 @@ namespace DBS.Catalyst
             );
         }
 
-        public void CreateDebugObjects(Transform debugPrefab)
+        public void CreateDebugObjects(Transform debugPrefab, GameObject gridVisual)
         {
+            Vector3 gridVisualOffset = new Vector3(0, .03f, 0);
+            gridSystemVisualArray = new cGridSystemVisual[width, height];
+
             for (int x = 0; x < width; x++)
             {
                 for (int z = 0; z < height; z++)
                 {
                     cGridPosition gridPosition = new cGridPosition(x, z);
-                    Transform debugTransform = GameObject.Instantiate(debugPrefab, GetWorldPosition(gridPosition), quaternion.identity);
+                    Transform debugTransform = Object.Instantiate(debugPrefab, GetWorldPosition(gridPosition), quaternion.identity);
                     cGridDebugObject gridDebugObject = debugTransform.GetComponent<cGridDebugObject>();
                     gridDebugObject.SetGridObject(GetGridObject(gridPosition));
+                    
+                    GameObject newGridVisual = Object.Instantiate(gridVisual, GetWorldPosition(gridPosition) + gridVisualOffset, gridVisual.transform.rotation) as GameObject;
+                    gridSystemVisualArray[x, z] = newGridVisual.GetComponent<cGridSystemVisual>();
                 }
             }
         }
         public cGridObject GetGridObject(cGridPosition gridPosition)
         {
             return gridObjectArray[gridPosition.x, gridPosition.z];
+        }
+        
+        public cGridSystemVisual GetGridSystemVisual(cGridPosition gridPosition)
+        {
+            return gridSystemVisualArray[gridPosition.x, gridPosition.z];
         }
 
         public bool IsValidGridPosition(cGridPosition gridPosition)

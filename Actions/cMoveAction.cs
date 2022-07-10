@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO.IsolatedStorage;
 using System.Net;
 using DBS.Catalyst;
 using DBS.Catalyst.Units;
@@ -83,6 +84,34 @@ public class cMoveAction : MonoBehaviour
         }
 
         return validGridPositionList;
+    }
+
+    public void HighlightValidMoves()
+    {
+        List<cGridPosition> validGridPositionList = GetValidActionGridPositionList();
+
+        foreach (cGridPosition pos in validGridPositionList)
+        {
+            cGridSystemVisual gridSystemVisual = cLevelGrid.Instance.GetGridSystemVisual(pos);
+            if (gridSystemVisual != null) gridSystemVisual.ShowVisual();
+        }
+    }
+    
+    public void HideAllMoves()
+    {
+        List<cGridPosition> validGridPositionList = GetValidActionGridPositionList();
+
+        foreach (cGridPosition pos in validGridPositionList)
+        {
+            cGridSystemVisual gridSystemVisual = cLevelGrid.Instance.GetGridSystemVisual(pos);
+            if (gridSystemVisual != null) gridSystemVisual.HideVisual();
+        }
+
+        cGridSystemVisual currentGridSystemVisual = cLevelGrid.Instance.GetGridSystemVisual(unit.GetGridPosition());
+        currentGridSystemVisual.HideVisual();
+
+        cGridSystemVisual nextGridSystemVisual = cLevelGrid.Instance.GetGridSystemVisual(cLevelGrid.Instance.GetGridPosition(TargetPosition));
+        nextGridSystemVisual.HideVisual();
     }
 }
 

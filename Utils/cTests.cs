@@ -10,14 +10,5 @@ namespace DBS.Catalyst
 {
     public class cTests : MonoBehaviour
     {
-        [SerializeField] private cUnit unit;
-
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.T))
-            {
-                unit.GetMoveAction().GetValidActionGridPositionList();
-            }
-        }
     }
 }
