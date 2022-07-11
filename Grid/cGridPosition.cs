@@ -1,7 +1,6 @@
 using System;
-using Unity.VisualScripting.Dependencies.NCalc;
 
-namespace DBS.Catalyst
+namespace DBS.Catalyst.Grid
 {
     public struct cGridPosition : IEquatable<cGridPosition>
     {

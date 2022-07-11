@@ -1,12 +1,9 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using DBS.Catalyst.System;
+using DBS.Catalyst.Utils;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-
-namespace DBS.Catalyst.Units
+namespace DBS.Catalyst.Unit
 {
     public class cUnitActionSystem : MonoBehaviour
     {
@@ -36,11 +33,11 @@ namespace DBS.Catalyst.Units
         {
             if (SelectedUnit)
             {
-                if (SelectedUnit.IsSelected && !SelectedUnit.IsBusy && !SelectedUnit.IsMoving)
+                if (SelectedUnit.IsSelected && SelectedUnit.CanTakeAction())
                 {
                     if (Input.GetMouseButtonDown(1))
                     {
-                        SelectedUnit.GetMoveAction().SetTargetPosition(cMouseWorld.GetPosition());
+                        SelectedUnit.GetMoveAction().Use(SelectedUnit.StartAction, cMouseWorld.GetPosition());
                         SelectedUnit.GetMoveAction().HideAllMoves();
                         DeselectAllUnits();
                     }
@@ -52,10 +49,25 @@ namespace DBS.Catalyst.Units
             if (Input.GetMouseButtonDown(0))
             {
                 cUnit unit = cMouseWorld.GetUnit();
-                if (unit && !unit.IsBusy)
+                if (unit)
                 {
-                    SelectUnit(unit);
-                    unit.GetMoveAction().HighlightValidMoves();
+                    if (!unit.IsSelected && unit.CanTakeAction())
+                    {
+                        SelectUnit(unit);
+                        unit.GetMoveAction().HighlightValidMoves();
+                    }
+                }
+            }
+            
+            if (Input.GetKeyDown(KeyCode.X))
+            {
+                if (SelectedUnit)
+                {
+                    if (SelectedUnit.IsSelected && SelectedUnit.CanTakeAction())
+                    {
+                        SelectedUnit.GetSpinAction().Use(SelectedUnit.StartAction);
+                        DeselectAllUnits();
+                    }
                 }
             }
         }

@@ -1,10 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DBS.Catalyst.Units;
+using DBS.Catalyst.Unit;
 using UnityEngine;
 
-namespace DBS.Catalyst.System
+namespace DBS.Catalyst.Utils
 {
     public class cMouseWorld : MonoBehaviour
     {
@@ -19,14 +16,14 @@ namespace DBS.Catalyst.System
 
         public static Vector3 GetPosition()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, instance.mousePlaneLayerMask);
             return raycastHit.point;
         }
 
         public static cUnit GetUnit()
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out RaycastHit raycastHit, float.MaxValue, instance.unitLayerMask))
             {
                 if (raycastHit.transform.TryGetComponent(out cUnit unit))

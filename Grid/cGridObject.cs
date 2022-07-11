@@ -1,12 +1,8 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DBS.Catalyst;
-using DBS.Catalyst.Units;
+using DBS.Catalyst.Unit;
 using Sirenix.OdinInspector;
 using UnityEngine;
 
-namespace DBS.Catalyst
+namespace DBS.Catalyst.Grid
 {
     public class cGridObject : MonoBehaviour
     {

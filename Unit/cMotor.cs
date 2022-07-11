@@ -1,9 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace DBS.Catalyst.Animations
+namespace DBS.Catalyst.Unit
 {
     [RequireComponent(typeof(Animator))]
     public class cMotor : MonoBehaviour

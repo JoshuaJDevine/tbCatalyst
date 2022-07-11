@@ -1,11 +1,7 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DBS.Catalyst.Units;
 using DG.Tweening;
 using UnityEngine;
 
-namespace DBS.Catalyst
+namespace DBS.Catalyst.Unit
 {
     public class cUnitSelectedVisual : MonoBehaviour
     {

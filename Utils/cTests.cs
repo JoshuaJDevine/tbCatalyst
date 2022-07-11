@@ -1,12 +1,6 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using DBS.Catalyst;
-using DBS.Catalyst.System;
-using DBS.Catalyst.Units;
 using UnityEngine;
 
-namespace DBS.Catalyst
+namespace DBS.Catalyst.Utils
 {
     public class cTests : MonoBehaviour
     {

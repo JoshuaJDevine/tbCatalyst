@@ -1,9 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace DBS.Catalyst
+namespace DBS.Catalyst.Grid
 {
     public class cGridSystem
     {
